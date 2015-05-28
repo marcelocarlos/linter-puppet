@@ -1,9 +1,8 @@
 {
   "name": "linter-puppet",
   "linter-package": true,
-  "activationEvents": [],
   "main": "./lib/init",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Lint puppet, using puppet parser",
   "repository": {
     "type": "git",

@@ -1,5 +1,6 @@
 linterPath = atom.packages.getLoadedPackage("linter").path
 Linter = require "#{linterPath}/lib/linter"
+{CompositeDisposable} = require 'atom'
 
 class LinterPuppet extends Linter
   # The syntax that the linter handles. May be a string or
@@ -21,13 +22,15 @@ class LinterPuppet extends Linter
   regex: '.*: (?<message>(Syntax|Unclosed|Could) (.|\\n)*) at (.|\\n)*:(?<line>\\d+)'
 
   constructor: (editor) ->
+    @disposables = new CompositeDisposable
     super(editor)
 
-    atom.config.observe 'linter-puppet.puppetExecutablePath', =>
+    @disposables.add atom.config.observe 'linter-puppet.puppetExecutablePath', =>
       @executablePath = atom.config.get 'linter-puppet.puppetExecutablePath'
 
   destroy: ->
-    atom.config.unobserve 'linter-puppet.puppetExecutablePath'
+      super
+      @disposables.dispose()
 
   createMessage: (match) ->
     # message might be empty, we have to supply a value
